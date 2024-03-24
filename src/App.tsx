@@ -22,7 +22,6 @@ body{
   justify-content:center;
   text-align: center;
   margin-top: 20px;  
-  
 }
 
 *{
