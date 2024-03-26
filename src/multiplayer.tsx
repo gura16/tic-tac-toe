@@ -12,6 +12,10 @@ function Multiplayer() {
   const [xIsNext, setXIsNext] = useState<boolean>(true);
   const [winner, setWinner] = useState<string | null>(null);
 
+  const [xWins, setXWins] = useState<number>(0);
+  const [oWins, setOWins] = useState<number>(0);
+  const [ties, setTies] = useState<number>(0);
+
   const handleClick = (index: number) => {
     if (winner || board[index] !== null) return;
     const squares = [...board];
@@ -19,9 +23,19 @@ function Multiplayer() {
     setBoard(squares);
 
     if (calculateWinner(squares)) {
-      setWinner(calculateWinner(squares));
+      const winningPlayer = calculateWinner(squares);
+      setWinner(winningPlayer);
+      if (winningPlayer === "X") {
+        setXWins(xWins + 1);
+      } else {
+        setOWins(oWins + 1);
+      }
     } else {
-      setXIsNext(!xIsNext);
+      if (squares.every((square) => square !== null)) {
+        setTies(ties + 1);
+      } else {
+        setXIsNext(!xIsNext);
+      }
     }
   };
 
@@ -61,8 +75,12 @@ function Multiplayer() {
   };
 
   const renderWinnerMessage = () => {
+    const isBoardFull = board.every((square) => square !== null);
+
     if (winner) {
-      return <p>{`winner: ${winner}`}</p>;
+      return <p>{`Winner: ${winner}`}</p>;
+    } else if (isBoardFull) {
+      return <p>It's a tie!</p>;
     } else {
       return <p>{`Next player: ${xIsNext ? "X" : "O"}`}</p>;
     }
@@ -105,6 +123,11 @@ function Multiplayer() {
           {renderSquare(6)}
           {renderSquare(7)}
           {renderSquare(8)}
+        </Card>
+        <Card>
+          <p>X Wins: {xWins}</p>
+          <p>O Wins: {oWins}</p>
+          <p>Ties: {ties}</p>
         </Card>
       </Board>
     </>
