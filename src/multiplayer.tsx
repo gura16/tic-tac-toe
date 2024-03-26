@@ -7,6 +7,7 @@ import oval from "./assets/Oval Copy.svg";
 import { useState } from "react";
 
 function Multiplayer() {
+  const initialBoard = Array(9).fill(null);
   const [board, setBoard] = useState<string[]>(Array(9).fill(null));
   const [xIsNext, setXIsNext] = useState<boolean>(true);
   const [winner, setWinner] = useState<string | null>(null);
@@ -67,6 +68,12 @@ function Multiplayer() {
     }
   };
 
+  const handleRedo = () => {
+    setBoard(initialBoard);
+    setWinner(null);
+    setXIsNext(true);
+  };
+
   return (
     <>
       <Titlecontainer>
@@ -78,7 +85,7 @@ function Multiplayer() {
           <Img_x src={xIsNext ? x_path : oval} alt={xIsNext ? "X" : "O"} />
           <Turn>TURN</Turn>
         </Turnsigncard>
-        <Redocard>
+        <Redocard onClick={handleRedo}>
           <Imgredo src={redo} />
         </Redocard>
       </Titlecontainer>
